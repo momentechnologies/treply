@@ -1,0 +1,15 @@
+{
+  "name": "treply",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:momentechnologies/treply.git",
+    "directory": "packages/treply"
+  },
+  "author": "Max Moeschinger <m.moeschinger@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --env.environment=production --config ../treply-scripts/config/webpack.config.js",
+    "start": "webpack-dev-server --env.environment=development --config ../treply-scripts/config/webpack.config.js --hot"
+  }
+}

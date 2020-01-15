@@ -1,0 +1,11 @@
+{
+  "name": "treply-scripts",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:momentechnologies/treply.git",
+    "directory": "packages/treply-scripts"
+  },
+  "author": "Max Moeschinger <m.moeschinger@gmail.com>",
+  "license": "MIT"
+}

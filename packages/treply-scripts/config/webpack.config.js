@@ -1,35 +1,19 @@
-const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const paths = require('./paths');
 const buildCssRules = require('./buildCssRules');
 
-const PATH_SOURCE = path.join(__dirname, '../src');
-const PUBLIC_SOURCE = path.join(__dirname, '../public');
-const PATH_DIST = path.join(__dirname, '../dist');
-
-module.exports = env => {
-    const environment = env.environment;
+module.exports = environment => {
     const isProduction = environment === 'production';
 
     return {
         mode: environment,
         stats: 'minimal',
-        devServer: {
-            contentBase: PATH_DIST,
-            clientLogLevel: 'silent',
-            host: 'localhost',
-            port: 8080,
-            historyApiFallback: true,
-            overlay: {
-                errors: true,
-                warnings: true,
-            },
-        },
-        entry: ['@hot-loader/react-dom', path.join(PATH_SOURCE, './index.js')],
+        entry: ['@hot-loader/react-dom', paths.appIndexJs],
         output: {
-            path: PATH_DIST,
+            path: paths.appBuild,
             filename: 'js/[name].[hash].js',
         },
         resolve: {
@@ -65,13 +49,13 @@ module.exports = env => {
         },
         plugins: [
             new CleanWebpackPlugin(),
-            new CopyPlugin([{ from: PUBLIC_SOURCE, to: PATH_DIST }]),
+            new CopyPlugin([{ from: paths.appPublic, to: paths.appBuild }]),
             new MiniCssExtractPlugin({
                 filename: 'css/[name].[contenthash:8].css',
                 chunkFilename: 'css/[name].[contenthash:8].chunk.css',
             }),
             new HtmlWebpackPlugin({
-                template: path.join(PUBLIC_SOURCE, './index.html'),
+                template: paths.appHtml,
             }),
         ],
     };

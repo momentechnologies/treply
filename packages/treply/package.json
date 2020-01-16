@@ -8,8 +8,7 @@
   },
   "author": "Max Moeschinger <m.moeschinger@gmail.com>",
   "license": "MIT",
-  "scripts": {
-    "build": "webpack --env.environment=production --config ../treply-scripts/config/webpack.config.js",
-    "start": "webpack-dev-server --env.environment=development --config ../treply-scripts/config/webpack.config.js --hot"
+  "bin": {
+    "create-react-app": "./index.js"
   }
 }

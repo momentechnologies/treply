@@ -2,7 +2,7 @@ const paths = require('./paths');
 
 module.exports = () => {
     return {
-        contentBase: paths.appBuild,
+        contentBase: paths.appPublic,
         clientLogLevel: 'silent',
         quiet: true,
         hot: true,

@@ -1,10 +1,12 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const postcssNormalize = require('postcss-normalize');
 
+const cssRegex = /\.css$/;
+const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
-const getStyleLoaders = (isProduction, cssOptions) => {
+const getStyleLoaders = (isProduction, cssOptions, preProcessor) => {
     return [
         !isProduction && require.resolve('style-loader'),
         isProduction && {
@@ -32,14 +34,14 @@ const getStyleLoaders = (isProduction, cssOptions) => {
                 sourceMap: isProduction,
             },
         },
-        {
+        preProcessor && {
             loader: require.resolve('resolve-url-loader'),
             options: {
                 sourceMap: isProduction,
             },
         },
-        {
-            loader: require.resolve('sass-loader'),
+        preProcessor && {
+            loader: require.resolve(preProcessor),
             options: {
                 sourceMap: true,
             },
@@ -50,12 +52,33 @@ const getStyleLoaders = (isProduction, cssOptions) => {
 module.exports = (isProduction = false) => {
     return [
         {
-            test: sassRegex,
-            exclude: sassModuleRegex,
+            test: cssRegex,
+            exclude: cssModuleRegex,
             use: getStyleLoaders(isProduction, {
-                importLoaders: 2,
+                importLoaders: 1,
                 sourceMap: isProduction,
             }),
+            sideEffects: true,
+        },
+        {
+            test: cssModuleRegex,
+            use: getStyleLoaders(isProduction, {
+                importLoaders: 1,
+                sourceMap: isProduction,
+                modules: true,
+            }),
+        },
+        {
+            test: sassRegex,
+            exclude: sassModuleRegex,
+            use: getStyleLoaders(
+                isProduction,
+                {
+                    importLoaders: 2,
+                    sourceMap: isProduction,
+                },
+                'sass-loader'
+            ),
             sideEffects: true,
         },
         {

@@ -25,6 +25,7 @@ module.exports = environment => {
     return getConfig({
         mode: environment,
         stats: 'minimal',
+        devtool: isProduction ? 'source-map' : 'cheap-module-source-map',
         entry: ['@hot-loader/react-dom', paths.appIndexJs],
         output: {
             path: paths.appBuild,
@@ -37,13 +38,16 @@ module.exports = environment => {
             },
         },
         module: {
+            strictExportPresence: true,
             rules: [
+                { parser: { requireEnsure: false } },
                 {
                     test: /\.(js|jsx|mjs)$/,
                     exclude: /node_modules/,
                     use: {
                         loader: 'babel-loader',
                         options: {
+                            cacheDirectory: true,
                             presets: [
                                 [
                                     '@babel/preset-env',
@@ -65,15 +69,17 @@ module.exports = environment => {
             ],
         },
         plugins: [
-            new CleanWebpackPlugin(),
-            new CopyPlugin([{ from: paths.appPublic, to: paths.appBuild }]),
-            new MiniCssExtractPlugin({
-                filename: 'css/[name].[contenthash:8].css',
-                chunkFilename: 'css/[name].[contenthash:8].chunk.css',
-            }),
+            isProduction && new CleanWebpackPlugin(),
             new HtmlWebpackPlugin({
+                inject: true,
                 template: paths.appHtml,
             }),
-        ],
+            new CopyPlugin([{ from: paths.appPublic, to: paths.appBuild }]),
+            isProduction &&
+                new MiniCssExtractPlugin({
+                    filename: 'css/[name].[contenthash:8].css',
+                    chunkFilename: 'css/[name].[contenthash:8].chunk.css',
+                }),
+        ].filter(Boolean),
     });
 };

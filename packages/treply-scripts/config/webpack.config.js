@@ -17,6 +17,7 @@ module.exports = environment => {
             filename: 'js/[name].[hash].js',
         },
         resolve: {
+            extensions: ['.js', '.jsx', '.mjs'],
             alias: {
                 'react-dom': '@hot-loader/react-dom',
             },
@@ -24,7 +25,7 @@ module.exports = environment => {
         module: {
             rules: [
                 {
-                    test: /\.js$/,
+                    test: /\.(js|jsx|mjs)$/,
                     exclude: /node_modules/,
                     use: {
                         loader: 'babel-loader',

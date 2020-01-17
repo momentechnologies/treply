@@ -2,13 +2,27 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
+const fs = require('fs');
+const chalk = require('chalk');
 const paths = require('./paths');
 const buildCssRules = require('./buildCssRules');
 
 module.exports = environment => {
     const isProduction = environment === 'production';
+    const customWebpackExists = fs.existsSync(
+        path.join(paths.appPath, 'webpack.config.js')
+    );
 
-    return {
+    if (customWebpackExists) {
+        console.log(chalk.green('Using custom webpack config.'));
+    }
+
+    const getConfig = customWebpackExists
+        ? require(path.join(paths.appPath, 'webpack.config.js'))
+        : x => x;
+
+    return getConfig({
         mode: environment,
         stats: 'minimal',
         entry: ['@hot-loader/react-dom', paths.appIndexJs],
@@ -35,8 +49,10 @@ module.exports = environment => {
                                     '@babel/preset-env',
                                     {
                                         debug: false,
-                                        useBuiltIns: 'usage',
+                                        useBuiltIns: 'entry',
                                         corejs: 3,
+                                        modules: false,
+                                        exclude: ['transform-typeof-symbol'],
                                     },
                                 ],
                                 '@babel/preset-react',
@@ -59,5 +75,5 @@ module.exports = environment => {
                 template: paths.appHtml,
             }),
         ],
-    };
+    });
 };

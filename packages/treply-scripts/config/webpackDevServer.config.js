@@ -8,6 +8,7 @@ module.exports = () => {
         hot: true,
         host: '0.0.0.0',
         historyApiFallback: true,
+        disableHostCheck: true,
         overlay: {
             errors: true,
             warnings: true,

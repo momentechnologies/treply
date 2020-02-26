@@ -69,7 +69,10 @@ module.exports = environment => {
                                 ],
                                 '@babel/preset-react',
                             ],
-                            plugins: ['react-hot-loader/babel'],
+                            plugins: [
+                                '@babel/plugin-transform-runtime',
+                                'react-hot-loader/babel',
+                            ],
                         },
                     },
                 },

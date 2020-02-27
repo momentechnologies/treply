@@ -32,7 +32,7 @@ module.exports = environment => {
             filename: 'js/[name].[hash].js',
         },
         resolve: {
-            extensions: ['.js', '.jsx', '.mjs'],
+            extensions: ['.js', '.jsx', '.mjs', ".json"],
             alias: {
                 'react-dom': '@hot-loader/react-dom',
             },
